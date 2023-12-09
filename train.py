@@ -41,7 +41,7 @@ device_type = 'cuda' if 'cuda' in device else 'cpu'
 ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
 ctx = torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
-data_dir = 'data'
+data_dir = 'data/openwebtext'
 train_data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
 # Use only 70% of the training data.
 train_data = train_data[:int(0.7*len(train_data))]

@@ -131,7 +131,7 @@ class GPT(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
-    def forward(self, idx, targets=None):
+    def forward(self, idx, targets=None, return_all_logits=False):
         device = idx.device
         b, t = idx.shape
         pos = torch.arange(0, t, dtype=torch.long, device=device)
@@ -148,8 +148,12 @@ class GPT(nn.Module):
             logits = self.lm_head(out)
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
         else:
-            # Return just the last timestep during inference
-            logits = self.lm_head(out[:, [-1], :])
+            if return_all_logits:
+                # For fine-tuning tasks return all logits and compute custom loss.
+                logits = self.lm_head(x)
+            else:
+                # Return just the last timestep during inference
+                logits = self.lm_head(out[:, [-1], :])
             loss = None
 
         return logits, loss

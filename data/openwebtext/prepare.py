@@ -4,11 +4,12 @@ import numpy as np
 import tiktoken
 from datasets import load_dataset
 
-num_proc = 2
+num_proc = 8
 
 num_proc_load_dataset = num_proc
 
 if __name__ == '__main__':
+    # Load openwebtext data from transformer
     dataset = load_dataset("openwebtext", num_proc=num_proc_load_dataset)
 
     split_dataset = dataset["train"].train_test_split(test_size=0.0005, seed=2357, shuffle=True)
@@ -16,6 +17,7 @@ if __name__ == '__main__':
 
     enc = tiktoken.get_encoding("gpt2")
     def process(example):
+        # Append end_of_text token and store lens
         ids = enc.encode_ordinary(example['text'])
         ids.append(enc.eot_token)
         out = {'ids': ids, 'len': len(ids)}
@@ -37,6 +39,7 @@ if __name__ == '__main__':
 
         idx = 0
         for batch_idx in tqdm(range(total_batches), desc=f'writing {filename}'):
+            # Write to file in a sharded manner.
             batch = dset.shard(num_shards=total_batches, index=batch_idx, contiguous=True).with_format('numpy')
             arr_batch = np.concatenate(batch['ids'])
             arr[idx : idx + len(arr_batch)] = arr_batch
