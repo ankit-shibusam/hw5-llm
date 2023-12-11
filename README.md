@@ -1,7 +1,7 @@
 # HW 5 - Large Language Model
 
 Team Members -
-1) Ankit Shibusam = ashibusa@andrew.cmu.edu
+1) Ankit Shibusam - ashibusa@andrew.cmu.edu
 2) Atharva Anand Joshi - atharvaa@andrew.cmu.edu
 3) Ketan Ramaneti - kramanet@andrew.cmu.edu
 
@@ -32,6 +32,8 @@ python data/squad/prepare.py
 ```
 
 4) Set the right file names and the required config variables in finetune_config.py and config.py. The other fields can be left untouched, but the file paths will need to be modified.
+
+5) The model trained checkpoints can be downloaded from this directory - https://drive.google.com/drive/folders/13nobcjJdx2svWk4mJ8Xj_gO3p9V9I4AZ?usp=sharing
 
 ## TODO
 1) Setup support for distributed training
